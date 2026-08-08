@@ -463,7 +463,7 @@ func saveResults(detailPath, alivePath string, alive, dead []ProxyResult) error 
 	defer wAlive.Flush()
 
 	for _, r := range alive {
-		fmt.Fprintf(wAlive, "%s (%s) | %dms\n", r.Address, r.Type, r.Latency.Milliseconds())
+		fmt.Fprintf(wAlive, "%s, %s, %dms\n", r.Address, strings.ToUpper(r.Type), r.Latency.Milliseconds())
 	}
 
 	return nil
