@@ -1,0 +1,31 @@
+name: Proxy Health Check
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '7 3 * * *' # setiap hari 03:07 UTC
+
+jobs:
+  check-proxies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Run proxy checker
+        run: go run main.go
+
+      - name: Upload hasil
+        uses: actions/upload-artifact@v4
+        with:
+          name: proxy-results
+          path: |
+            proxy_health.txt
+            proxy_alive.txt
