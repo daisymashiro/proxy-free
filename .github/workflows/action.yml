@@ -1,31 +1,35 @@
-name: Proxy Health Check
+name: Golang Proxy Scanning
 
 on:
-  workflow_dispatch:
-  push:
-    branches: [main]
+  workflow_dispatch: # Tombol manual untuk menjalankan workflow
   schedule:
-    - cron: '7 3 * * *' # setiap hari 03:07 UTC
+    - cron: '0 */12 * * *' # Jalan otomatis tiap 12 jam (2x sehari)
 
 jobs:
-  check-proxies:
+  scan-proxies:
     runs-on: ubuntu-latest
+    name: 🔎 Scan Proxy Go
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: 📂 Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.SCAN_TOKEN }}
 
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: go.mod
+    - name: 🛠️ Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: go.mod
 
-      - name: Run proxy checker
-        run: go run main.go
+    - name: 🚀 Run Scanner
+      run: |
+        go run main.go
 
-      - name: Upload hasil
-        uses: actions/upload-artifact@v4
-        with:
-          name: proxy-results
-          path: |
-            proxy_health.txt
-            proxy_alive.txt
+    - name: 📤 Commit Results
+      if: success()
+      run: |
+        git config --global user.name "Github Actions"
+        git config --global user.email "actions@github.com"
+        git add proxy_health.txt proxy_alive.txt
+        git commit -m "🐦‍🔥 Update Proxy: proxy_health.txt & proxy_alive.txt" || echo "No changes to commit"
+        git push origin main
