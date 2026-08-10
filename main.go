@@ -28,7 +28,7 @@ const (
 	outputDetail   = "proxy_health.txt"
 	outputAlive    = "proxy_alive.txt"
 	requestTimeout = 8 * time.Second
-	workers        = 50
+	workers        = 70
 	retryCount     = 1
 )
 

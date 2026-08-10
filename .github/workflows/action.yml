@@ -3,7 +3,7 @@ name: Golang Proxy Scanning
 on:
   workflow_dispatch: # Tombol manual untuk menjalankan workflow
   schedule:
-    - cron: '0 */12 * * *' # Jalan otomatis tiap 12 jam (2x sehari)
+    - cron: '0 */2 * * *' # Jalan otomatis tiap 12 jam (2x sehari)
 
 jobs:
   scan-proxies:
